@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment';
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
@@ -6,34 +6,11 @@ import { Container, Grid, Paper, Typography } from '@material-ui/core';
 import SnapshotISA from '../../UI/SnapshotISA';
 import FormAsset from '../../UI/FormAsset';
 import { formConfig } from '../../Utils/asset-form-config';
+import { AssetContext } from '../../../context/assetContext';
 
 const PageISA = ({classes}) => {
-    const [isas, setISAs] = useState([]);
     const { register, handleSubmit, errors, control } = useForm();
-
-    const fetchISAData = () => {
-        const query = `
-            {
-                isa{
-                    id
-                    date
-                    stocks
-                    commodities
-                    bonds
-                    cash
-                }
-            }
-        `;
-        useGraphQL(query).then(response => {
-            setISAs(response.data.isa);
-        }).catch(error => {
-            console.info(error.message, 'error.message')
-        });
-    }
-
-    useEffect(() => {
-        fetchISAData();
-    }, []);
+    const { assetState: { isas }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
 
     const handlerFormSubmit = async (data) => {      
         const query = `
@@ -56,7 +33,7 @@ const PageISA = ({classes}) => {
         `;
 
         useGraphQL(query);
-        fetchISAData();
+        fetchAllAssets(dispatchAsset);
     }
 
     return (
@@ -84,7 +61,7 @@ const PageISA = ({classes}) => {
                                 <Typography variant="h6" gutterBottom>
                                     Latest Snapshots
                                 </Typography>
-                                {isas && isas.map(isa => <SnapshotISA key={isa.id} isaData={isa} classes={classes} fetchISAData={fetchISAData} />)}
+                                {isas && isas.map(isa => <SnapshotISA key={isa.id} isaData={isa} classes={classes} />)}
                             </Grid>
                         </Grid>
                     </form>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -7,34 +7,11 @@ import { Container, Grid, Paper, Typography } from '@material-ui/core';
 import SnapshotCrypto from '../../UI/SnapshotCrypto';
 import FormAsset from '../../UI/FormAsset';
 import { formConfig } from '../../Utils/asset-form-config';
+import { AssetContext } from '../../../context/assetContext';
 
-
-const PageCash = ({classes}) => {
-    const [cryptos, setCryptos] = useState([]);
+const PageCrypto = ({classes}) => {
     const { register, handleSubmit, errors, control } = useForm();
-
-    const fetchCryptoData = () => {
-        const query = `
-            {
-                crypto{
-                    id
-                    date
-                    bitcoin
-                    ether
-                    altcoins
-                }
-            }
-        `;
-        useGraphQL(query).then(response => {
-            setCryptos(response.data.crypto);
-        }).catch(error => {
-            console.info(error.message, 'error.message')
-        });
-    }
-
-    useEffect(() => {
-        fetchCryptoData();
-    }, []);
+    const { assetState: { cryptos }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
 
     const handlerFormSubmit = async (data) => {   
         const query = `
@@ -55,7 +32,7 @@ const PageCash = ({classes}) => {
         `;
 
         useGraphQL(query);
-        fetchCryptoData();
+        fetchAllAssets(dispatchAsset);
     }
 
     return (
@@ -83,7 +60,7 @@ const PageCash = ({classes}) => {
                                 <Typography variant="h6" gutterBottom>
                                     Latest Snapshots
                                 </Typography>
-                                {cryptos && cryptos.map(crypto => <SnapshotCrypto key={crypto.id} data={crypto} classes={classes} fetchFunc={fetchCryptoData} />)}
+                                {cryptos && cryptos.map(crypto => <SnapshotCrypto key={crypto.id} data={crypto} classes={classes} />)}
                             </Grid>
                         </Grid>
                     </form>
@@ -92,4 +69,4 @@ const PageCash = ({classes}) => {
     )
 }
 
-export default PageCash;
+export default PageCrypto;

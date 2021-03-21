@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -7,38 +7,11 @@ import { Container, Grid, Paper, Typography } from '@material-ui/core';
 import SnapshotCash from '../../UI/SnapshotCash';
 import FormAsset from '../../UI/FormAsset';
 import { formConfig } from '../../Utils/asset-form-config';
+import { AssetContext } from '../../../context/assetContext';
 
 const PageCash = ({classes}) => {
-    const [cashs, setCashs] = useState([]);
     const { register, handleSubmit, errors, control } = useForm();
-
-    const fetchCashData = () => {
-        const query = `
-            {
-                cash{
-                    id
-                    date
-                    krakenGBP
-                    krakenUSDT
-                    krakenUSDC
-                    celsiusUSDT
-                    celsiusUSDC
-                    blockfiUSDT
-                    blockfiUSDC
-                    spainEURO
-                }
-            }
-        `;
-        useGraphQL(query).then(response => {
-            setCashs(response.data.cash);
-        }).catch(error => {
-            console.info(error.message, 'error.message')
-        });
-    }
-
-    useEffect(() => {
-        fetchCashData();
-    }, []);
+    const { assetState: { cashs }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
 
     const handlerFormSubmit = async (data) => {   
         const query = `
@@ -69,7 +42,7 @@ const PageCash = ({classes}) => {
         `;
 
         useGraphQL(query);
-        fetchCashData();
+        fetchAllAssets(dispatchAsset);
     }
 
     return (
@@ -102,7 +75,7 @@ const PageCash = ({classes}) => {
                                         key={cash.id} 
                                         data={cash} 
                                         classes={classes} 
-                                        fetchFunc={fetchCashData} 
+                                        fetchFunc={null} 
                                     />
                                 ))}
                             </Grid>
