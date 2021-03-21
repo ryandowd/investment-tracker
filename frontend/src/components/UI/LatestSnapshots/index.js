@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Title from './Title';
+import Title from '../Title';
 
 // Generate Order Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
@@ -52,10 +52,10 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Orders() {
+const LatestSnapshots = () => {
   return (
-    <React.Fragment>
-      <Title>Recent Orders</Title>
+    <>
+      <Title>Latest Snapshots</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -81,6 +81,8 @@ export default function Orders() {
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         See more orders
       </Link>
-    </React.Fragment>
+    </>
   );
 }
+
+export default LatestSnapshots;
