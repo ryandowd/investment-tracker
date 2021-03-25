@@ -1,29 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import moment from 'moment';
 
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
 import { Container, Grid, Paper, Typography } from '@material-ui/core';
-import SnapshotCrypto from '../../UI/SnapshotCrypto';
+import Snapshot from '../../UI/Snapshot';
 import FormAsset from '../../UI/FormAsset';
-import { formConfig } from '../../Utils/asset-form-config';
-import { AssetContext } from '../../../context/assetContext';
+import { formConfig } from '../../../utils/asset-types-config';
+import { useAssetContext } from '../../../context/assetContext';
+import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
+import { useDeleteSnapshot } from '../../../hooks/useDeleteSnapshot'
 
 const PageCrypto = ({classes}) => {
     const { register, handleSubmit, errors, control } = useForm();
-    const { assetState: { cryptos }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
+    const { assetState: { cryptos }, dispatchAsset } = useAssetContext()
+    const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
+
+    useEffect(() => {
+        fetchAllAssets();
+    }, []);
 
     const handlerFormSubmit = async (data) => {   
         const query = `
             mutation {
                 createCrypto(
                     date: "${moment(data.date).format('MMMM Do YYYY')}",
+                    dateUnix: ${moment(data.date).unix()},
                     bitcoin: ${data.bitcoin}, 
                     ether: ${data.ether},
                     altcoins: ${data.altcoins}
                 ) {
                     id
                     date
+                    dateUnix
                     bitcoin
                     ether
                     altcoins
@@ -32,7 +41,7 @@ const PageCrypto = ({classes}) => {
         `;
 
         useGraphQL(query);
-        fetchAllAssets(dispatchAsset);
+        fetchAllAssets();
     }
 
     return (
@@ -52,7 +61,7 @@ const PageCrypto = ({classes}) => {
                                         errors={errors} 
                                         control={control} 
                                         Controller={Controller} 
-                                        formConfig={formConfig.cryptoForm}
+                                        formConfig={formConfig.crypto}
                                     />                                
                                 </Paper>
                             </Grid>
@@ -60,7 +69,14 @@ const PageCrypto = ({classes}) => {
                                 <Typography variant="h6" gutterBottom>
                                     Latest Snapshots
                                 </Typography>
-                                {cryptos && cryptos.map(crypto => <SnapshotCrypto key={crypto.id} data={crypto} classes={classes} />)}
+                                {cryptos && cryptos.map(crypto => (
+                                    <Snapshot 
+                                        type="crypto"
+                                        key={crypto.id} 
+                                        data={crypto} 
+                                        classes={classes} 
+                                    />
+                                ))}
                             </Grid>
                         </Grid>
                     </form>

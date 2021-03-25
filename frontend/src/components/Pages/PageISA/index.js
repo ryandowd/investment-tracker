@@ -1,22 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import moment from 'moment';
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
 import { Container, Grid, Paper, Typography } from '@material-ui/core';
-import SnapshotISA from '../../UI/SnapshotISA';
+import Snapshot from '../../UI/Snapshot';
 import FormAsset from '../../UI/FormAsset';
-import { formConfig } from '../../Utils/asset-form-config';
-import { AssetContext } from '../../../context/assetContext';
+import { formConfig } from '../../../utils/asset-types-config';
+import { useAssetContext } from '../../../context/assetContext';
+import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
 
 const PageISA = ({classes}) => {
     const { register, handleSubmit, errors, control } = useForm();
-    const { assetState: { isas }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
+    const { assetState: { isas }, dispatchAsset } = useAssetContext();
+    const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
 
-    const handlerFormSubmit = async (data) => {      
+    useEffect(() => {
+        fetchAllAssets();
+    }, []);
+
+    const handlerFormSubmit = async (data) => {    
         const query = `
             mutation {
-                createISA(
-                    date: "${moment().format('MMMM Do YYYY')}",
+                createIsa(
+                    date: "${moment(data.date).format('MMMM Do YYYY')}",
+                    dateUnix: ${moment(data.date).unix()},
                     cash: ${data.cash},
                     stocks: ${data.stocks},
                     commodities: ${data.commodities},
@@ -24,6 +31,7 @@ const PageISA = ({classes}) => {
                 ) {
                     id
                     date
+                    dateUnix
                     cash
                     stocks
                     commodities
@@ -33,7 +41,7 @@ const PageISA = ({classes}) => {
         `;
 
         useGraphQL(query);
-        fetchAllAssets(dispatchAsset);
+        fetchAllAssets();
     }
 
     return (
@@ -53,7 +61,7 @@ const PageISA = ({classes}) => {
                                         errors={errors} 
                                         control={control} 
                                         Controller={Controller} 
-                                        formConfig={formConfig.isaForm}
+                                        formConfig={formConfig.isa}
                                     />                                       
                                 </Paper>
                             </Grid>
@@ -61,7 +69,14 @@ const PageISA = ({classes}) => {
                                 <Typography variant="h6" gutterBottom>
                                     Latest Snapshots
                                 </Typography>
-                                {isas && isas.map(isa => <SnapshotISA key={isa.id} isaData={isa} classes={classes} />)}
+                                {isas && isas.map(isa => (
+                                    <Snapshot 
+                                        type="isa"
+                                        key={isa.id} 
+                                        data={isa} 
+                                        classes={classes} 
+                                    />
+                                ))}
                             </Grid>
                         </Grid>
                     </form>

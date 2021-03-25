@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 
 import { Container, Grid, Paper } from '@material-ui/core';
 import Chart from '../../UI/Chart';
 import Total from '../../UI/Total';
 import LatestSnapshots from '../../UI/LatestSnapshots';
+import { useAssetContext } from '../../../context/assetContext';
+import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
 
 const PageDashboard = ({classes}) => {
+    const { dispatchAsset } = useAssetContext();
+    const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+    useEffect(() => {
+      fetchAllAssets();
+    }, []);
 
     return (
         <main className={classes.content}>

@@ -1,5 +1,5 @@
 export const formConfig = {
-    cashForm: [
+    cash: [
         {
             name: "krakenGBP",
             label: "Kraken (GBP)"
@@ -33,7 +33,7 @@ export const formConfig = {
             label: "Spain (EURO)"
         }
     ],
-    cryptoForm: [
+    crypto: [
         {
             name: "bitcoin",
             label: "Bitcoin"
@@ -47,7 +47,7 @@ export const formConfig = {
             label: "Altcoins"
         }
     ],
-    isaForm: [
+    isa: [
         {
             name: "cash",
             label: "Cash"
@@ -56,10 +56,6 @@ export const formConfig = {
             name: "stocks",
             label: "Stocks"
         }, 
-        {
-            name: "altcoins",
-            label: "Altcoins"
-        },
         {
             name: "commodities",
             label: "Commodities"

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,6 @@ import Navigation from './components/UI/Navigation';
 import { AssetProvider } from './context/assetContext';
 
 import useStyles from './hooks/useStyles';
-
 import './main.css';
 
 const App = () => {

@@ -13,6 +13,10 @@ const useGraphQL = async (query) => {
     );
     const data = await response.json();
 
+    if (data) {
+        console.log('YEP!');
+    }
+
     return data;
 }
 

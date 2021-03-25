@@ -1,23 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
 import { Container, Grid, Paper, Typography } from '@material-ui/core';
-import SnapshotCash from '../../UI/SnapshotCash';
+import Snapshot from '../../UI/Snapshot';
 import FormAsset from '../../UI/FormAsset';
-import { formConfig } from '../../Utils/asset-form-config';
-import { AssetContext } from '../../../context/assetContext';
+import { formConfig } from '../../../utils/asset-types-config';
+import { useAssetContext } from '../../../context/assetContext';
+import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
 
 const PageCash = ({classes}) => {
     const { register, handleSubmit, errors, control } = useForm();
-    const { assetState: { cashs }, dispatchAsset, fetchAllAssets } = useContext(AssetContext);
+    const { assetState: { cashs }, dispatchAsset } = useAssetContext()
+    const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
+    
+    useEffect(() => {
+        fetchAllAssets();
+    }, []);
 
     const handlerFormSubmit = async (data) => {   
         const query = `
             mutation {
                 createCash(
                     date: "${moment(data.date).format('MMMM Do YYYY')}",
+                    dateUnix: ${moment(data.date).unix()},
                     krakenGBP: ${data.krakenGBP}, 
                     krakenUSDT: ${data.krakenUSDT}, 
                     krakenUSDC: ${data.krakenUSDC}, 
@@ -29,6 +37,7 @@ const PageCash = ({classes}) => {
                 ) {
                     id
                     date
+                    dateUnix
                     krakenGBP
                     krakenUSDT
                     krakenUSDC
@@ -41,8 +50,10 @@ const PageCash = ({classes}) => {
             }
         `;
 
+        console.log(query, 'query query query')
+
         useGraphQL(query);
-        fetchAllAssets(dispatchAsset);
+        fetchAllAssets();
     }
 
     return (
@@ -62,7 +73,7 @@ const PageCash = ({classes}) => {
                                         errors={errors} 
                                         control={control} 
                                         Controller={Controller} 
-                                        formConfig={formConfig.cashForm}
+                                        formConfig={formConfig.cash}
                                     />
                                 </Paper>
                             </Grid>
@@ -71,11 +82,11 @@ const PageCash = ({classes}) => {
                                     Latest Snapshots
                                 </Typography>
                                 {cashs && cashs.map(cash => (
-                                    <SnapshotCash 
+                                    <Snapshot 
+                                        type="cash"
                                         key={cash.id} 
                                         data={cash} 
                                         classes={classes} 
-                                        fetchFunc={null} 
                                     />
                                 ))}
                             </Grid>
