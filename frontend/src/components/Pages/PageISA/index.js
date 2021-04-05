@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import moment from 'moment';
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
+import useStyles from '../../../hooks/useStyles';
 import { Container, Grid, Paper, Typography } from '@material-ui/core';
 import Snapshot from '../../UI/Snapshot';
 import FormAsset from '../../UI/FormAsset';
@@ -9,9 +10,10 @@ import { formConfig } from '../../../utils/asset-types-config';
 import { useAssetContext } from '../../../context/assetContext';
 import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
 
-const PageISA = ({classes}) => {
+const PageISA = () => {
     const { register, handleSubmit, errors, control } = useForm();
     const { assetState: { isas }, dispatchAsset } = useAssetContext();
+    const classes = useStyles();
     const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
 
     useEffect(() => {

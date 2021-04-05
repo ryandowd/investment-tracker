@@ -20,6 +20,14 @@ export const navigationItems = (
         </ListItem>
     </Link>
     <Divider />
+    <Link to="/snapshots">
+        <ListItem button>
+        <ListItemIcon>
+            <MonetizationOnIcon />
+        </ListItemIcon>
+        <ListItemText primary="Snapshots" />
+        </ListItem>
+    </Link>
     <Link to="/cash">
         <ListItem button>
         <ListItemIcon>

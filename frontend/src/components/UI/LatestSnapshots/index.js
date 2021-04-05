@@ -11,8 +11,6 @@ import { useAssetContext } from '../../../context/assetContext';
 const LatestSnapshots = () => {
   const { assetState: { isas, cryptos, cashs, assetsList } } = useAssetContext();
 
-  console.log(assetsList, 'assetsList')
-
   return (
     <>
       <Title>Latest Snapshots</Title>

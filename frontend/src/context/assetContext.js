@@ -1,5 +1,6 @@
 import React, { useReducer, createContext, useContext } from "react";
 import { calculateTotals } from '../utils/calculateTotals';
+import { calculateTotal } from '../utils/calculateTotal';
 
 const AssetContext = createContext();
 
@@ -9,15 +10,15 @@ const initialState = {
     cashs: []
 }
 
-const assetReducer = (state, { type, value: { isa, crypto, cash } }) => {
+const assetReducer = (state, action) => {
+    const { type, value: { snapshot } } = action;
     switch(type) {
         case 'set_all_assets': 
             const newState = {
                 ...state,
-                isas: isa,
-                cryptos: crypto,
-                cashs: cash,
-                assetsList: calculateTotals(isa, crypto, cash)
+                snapshots: snapshot,
+                total: calculateTotal(snapshot[0])
+                // assetsList: calculateTotals(snapshot)
             }
             return newState
         default:

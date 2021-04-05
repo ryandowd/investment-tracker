@@ -1,7 +1,5 @@
 import React from 'react';
-import moment from 'moment';
-import { TextField, Button } from '@material-ui/core';
-import FormDatePicker from '../../UI/FormDatePicker';
+import { TextField } from '@material-ui/core';
 
 const FormAsset = ({ register, classes, errors, control, Controller, formConfig }) => {
 
@@ -12,16 +10,10 @@ const FormAsset = ({ register, classes, errors, control, Controller, formConfig 
 
     return (
         <>
-            <FormDatePicker
-                name="date"
-                required={true}
-                defaultValue={moment().format('YYYY-MM-DD')}
-                control={control}
-                Controller={Controller}
-            />
             {formConfig.map(({name, label}) => (
                 <>
                     <TextField
+                        key={name}
                         required
                         id={name}
                         name={name}
@@ -34,9 +26,6 @@ const FormAsset = ({ register, classes, errors, control, Controller, formConfig 
                     {errors[name] && (errors[name].message || 'Field required')}
                 </>
             ))}
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} className={classes.button}>
-                Save
-            </Button>
         </>
     );
 }

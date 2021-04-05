@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PageDashboard from './components/Pages/PageDashboard';
+import PageSnapshots from './components/Pages/PageSnapshots';
 import PageISA from './components/Pages/PageISA';
 import PageCash from './components/Pages/PageCash';
 import PageCrypto from './components/Pages/PageCrypto';
@@ -23,11 +24,12 @@ const App = () => {
       <div className={classes.root}>
         <AssetProvider>
           <Router>
-            <Navigation classes={classes} />
-            <Route exact path="/" render={() => <PageDashboard classes={classes} />} />
-            <Route path="/isa" render={() => <PageISA classes={classes} />} />
-            <Route path="/cash" render={() => <PageCash classes={classes} />} />
-            <Route path="/crypto" render={() => <PageCrypto classes={classes} />} />
+            <Navigation />
+            <Route exact path="/" render={() => <PageDashboard />} />
+            <Route exact path="/snapshots" render={() => <PageSnapshots />} />
+            <Route exact path="/isa" render={() => <PageISA />} />
+            <Route exact path="/cash" render={() => <PageCash />} />
+            <Route exact path="/crypto" render={() => <PageCrypto />} />
           </Router>
         </AssetProvider>
       </div>

@@ -2,22 +2,37 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useLocation } from "react-router-dom";
 
-import { AppBar, Toolbar, IconButton, Typography, List, Divider, Box, Drawer } from '@material-ui/core';
+import useStyles from '../../../hooks/useStyles';
+import { AppBar, Toolbar, IconButton, Typography, List, Divider, Drawer } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { navigationItems } from '../NavigationItems';
 
-const Navigation = ({classes}) => {
+const Navigation = () => {
     const location = useLocation();
     const [open, setOpen] = useState(true);
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
+    const classes = useStyles();
+
+    console.log(open, 'open open open open')
+
+    const handleDrawerToggle = () => {
+        if (open) {
+            setOpen(false);
+        } else {
+            setOpen(true);
+        }
+    }
+
+    // const handleDrawerOpen = () => {
+    //   setOpen(true);
+    // };
+    // const handleDrawerClose = () => {
+    //   setOpen(false);
+    // };
 
     const pageName = location.pathname === '/isa' ? 'ISA' : location.pathname === '/' ? 'Dashboard' : location.pathname;
+
+    console.log(pageName.replace('/', ''), 'pageName pageName pageName pageName')
     
     return (
         <>
@@ -27,7 +42,7 @@ const Navigation = ({classes}) => {
                     edge="start"
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={handleDrawerOpen}
+                    onClick={handleDrawerToggle}
                     className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                 >
                     <MenuIcon />
@@ -45,7 +60,7 @@ const Navigation = ({classes}) => {
                 open={open}
             >
                 <div className={classes.toolbarIcon}>
-                <IconButton onClick={handleDrawerClose}>
+                <IconButton onClick={handleDrawerToggle}>
                     <ChevronLeftIcon />
                 </IconButton>
                 </div>

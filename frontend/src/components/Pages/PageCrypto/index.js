@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { useForm, Controller } from 'react-hook-form';
 import useGraphQL from '../../../hooks/useGraphQL';
+import useStyles from '../../../hooks/useStyles';
 import { Container, Grid, Paper, Typography } from '@material-ui/core';
 import Snapshot from '../../UI/Snapshot';
 import FormAsset from '../../UI/FormAsset';
@@ -11,9 +12,10 @@ import { useAssetContext } from '../../../context/assetContext';
 import { useFetchAllAssets } from '../../../hooks/useFetchAllAssets';
 import { useDeleteSnapshot } from '../../../hooks/useDeleteSnapshot'
 
-const PageCrypto = ({classes}) => {
+const PageCrypto = () => {
     const { register, handleSubmit, errors, control } = useForm();
-    const { assetState: { cryptos }, dispatchAsset } = useAssetContext()
+    const { assetState: { cryptos }, dispatchAsset } = useAssetContext();
+    const classes = useStyles();
     const { fetchAllAssets } = useFetchAllAssets(dispatchAsset);
 
     useEffect(() => {

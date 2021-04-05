@@ -5,35 +5,31 @@ export const useFetchAllAssets = (dispatchAsset) => {
     const fetchAllAssets = () => {
         const query = `
             {
-                crypto{
-                    id
-                    date
-                    dateUnix
-                    bitcoin
-                    ether
-                    altcoins
-                }
-                cash{
-                    id
-                    date
-                    dateUnix
-                    krakenGBP
-                    krakenUSDT
-                    krakenUSDC
-                    celsiusUSDT
-                    celsiusUSDC
-                    blockfiUSDT
-                    blockfiUSDC
-                    spainEURO
-                }
-                isa{
-                    id
-                    date
-                    dateUnix
-                    stocks
-                    commodities
-                    bonds
-                    cash
+                snapshot {
+                id
+                date
+                dateUnix
+                    crypto {
+                        bitcoin
+                        ether
+                        altcoins
+                    }
+                    cash {
+                        krakenGBP
+                        krakenUSDT
+                        krakenUSDC
+                        celsiusUSDT
+                        celsiusUSDC
+                        blockfiUSDT
+                        blockfiUSDC
+                        spainEURO
+                    }
+                    isa {
+                        stocks
+                        commodities
+                        bonds
+                        cash
+                    }
                 }
             }
         `;
